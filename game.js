@@ -1,4 +1,4 @@
-﻿xpos = -168;
+xpos = -168;
 document.addEventListener('keypress', move, false);
 function ini() {
     document.getElementById("player1").style.position = "relative";
@@ -20,28 +20,26 @@ function move(event) {
 }
 
 function left() {
-    if (active==1) {
+    if ((active==1)&&(parseInt(document.getElementById("player1").style.left)>-373)) {
         xpos -= 5;
         document.getElementById("player1").style.left = xpos + "px";
         status = xpos;
         setTimeout("left()", 25);
         if(document.getElementById("player1").style.left=="-373px"){
             active=0;
-            /*範圍內停下來*/
         }
-        
+
     }
 }
 
 function right() {
-    if (active==2) {
+    if ((active==2)&&(parseInt(document.getElementById("player1").style.left)<377)) {
         xpos += 5;
         document.getElementById("player1").style.left = xpos + "px";
         status = xpos;
         setTimeout("right()", 25);
         if(document.getElementById("player1").style.left=="377px"){
-            active=0; 
-            /*範圍內停下來*/
+            active=0;
         }
     }
 }
