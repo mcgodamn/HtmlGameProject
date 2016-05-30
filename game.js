@@ -14,13 +14,13 @@ function move(event) {
         left();
     }
     else if ((myevent.keyCode == 39) && !active) {
-        active = 1;
+        active = 2;
         right();
     }
 }
 
 function left() {
-    if (active) {
+    if (active==1) {
         xpos -= 5;
         document.getElementById("player1").style.left = xpos + "px";
         status = xpos;
@@ -34,7 +34,7 @@ function left() {
 }
 
 function right() {
-    if (active) {
+    if (active==2) {
         xpos += 5;
         document.getElementById("player1").style.left = xpos + "px";
         status = xpos;
