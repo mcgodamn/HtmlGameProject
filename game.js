@@ -25,6 +25,11 @@ function left() {
         document.getElementById("player1").style.left = xpos + "px";
         status = xpos;
         setTimeout("left()", 25);
+        if(document.getElementById("player1").style.left=="-373px"){
+            active=0;
+            /*範圍內停下來*/
+        }
+        
     }
 }
 
@@ -34,5 +39,9 @@ function right() {
         document.getElementById("player1").style.left = xpos + "px";
         status = xpos;
         setTimeout("right()", 25);
+        if(document.getElementById("player1").style.left=="377px"){
+            active=0; 
+            /*範圍內停下來*/
+        }
     }
 }
