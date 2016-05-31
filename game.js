@@ -6,7 +6,7 @@
     document.getElementById("player1").style.top = "386px";
     document.getElementById("player1").style.left = xpos + "px";
     document.addEventListener('keypress', move, false);
-    // document.addEventListener('keydown', move, false);
+    document.addEventListener('keydown', move, false);
     // document.addEventListener('keyup', move, false);
 }
 
@@ -46,6 +46,7 @@ function left() {
         xpos = -373;
         document.getElementById("player1").style.left = xpos + "px";
         status = xpos;
+        active = 0;
     }
 }
 
@@ -63,9 +64,14 @@ function right() {
         }
         else active = 0;
     }
-    else if ((active == 1) && (xpos > 373)) {
-        xpos = 373;
+    else if ((active == 2) && (xpos > 377)) {
+        xpos = 377;
         document.getElementById("player1").style.left = xpos + "px";
         status = xpos;
+        active = 0;
     }
+}
+
+function test() {
+    document.write(xpos);
 }
