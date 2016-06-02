@@ -19,10 +19,12 @@ function move(event) {
     }
     if (myevent.keyCode == 37 && active != 1) {
         active = 1;
+        document.getElementById("test").src="playerL.png"
         left();
     }
     else if (myevent.keyCode == 39 && active != 2) {
         active = 2;
+        document.getElementById("test").src="playerR.png"
         right();
     }
 }
