@@ -1,17 +1,26 @@
 ﻿function ini() {
     xpos = -168; //紀錄目前位置
     active = 0; //to record the move state , 1 for left , 2 for right , 0 for still
-    skystatus = 'g'; // 'g' for ground , 'j' for jumping , 'a' for slashing to anemy , 'w' for hooking the wall
+    skystatus = 'g'; // 'g' for ground , 'j' for jumping , 's' for slashing to anemy , 'w' for hooking the wall
     ypos = 386;
+    xpos2 = 168;
+    ypos2 = 292;
     document.getElementById("player1").style.position = "relative";
     document.getElementById("player1").style.top = ypos + "px";
     document.getElementById("player1").style.left = xpos + "px";
+    document.getElementById("player2").style.position = "relative";
+    document.getElementById("player2").style.top = ypos2 + "px";
+    document.getElementById("player2").style.left = xpos2 + "px";
     document.addEventListener('keydown', move, false);
     document.addEventListener('keyup', move2, false);
 }
 
 function move(event) {
     var myevent = event ? event : window.event;
+    if (myevent.keyCode == 90) {
+        skystatus = 's';
+        slash();
+    }
     if ((myevent.keyCode == 38) && (skystatus == 'g')) {
         skystatus = 'j';
         jstatus = 1; // 1 up , 0 down
@@ -41,7 +50,7 @@ function move2(event2) {
 
 function left() {
     if ((active == 1) && (xpos > -373)) {
-        xpos -= 1;
+        xpos -= 3;
         document.getElementById("player1").style.left = xpos + "px";
         setTimeout("left()", 1);
     }
@@ -54,7 +63,7 @@ function left() {
 
 function right() {
     if ((active == 2) && (xpos < 377)) {
-        xpos += 1;
+        xpos += 3;
         document.getElementById("player1").style.left = xpos + "px";
         setTimeout("right()", 1);;
     }
@@ -85,6 +94,12 @@ function jump(jsta) {
                 jump(jstatus);
             }
         },1)
+    }
+}
+
+function slash() {
+    if (skystatus == 's') {
+        
     }
 }
 
