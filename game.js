@@ -4,7 +4,7 @@
     skystatus = 'g'; // 'g' for ground , 'j' for jumping , 's' for slashing to anemy , 'w' for hooking the wall
     ypos = 386;
     xpos2 = 168;
-    ypos2 = 186;
+    ypos2 = 386;
     slashf = 0;
     document.getElementById("player1").style.position = "relative";
     document.getElementById("player1").style.top = ypos + "px";
@@ -111,14 +111,9 @@ function slash() {
             j = ypos - ypos2;
             if (i > 0) document.getElementById("test").src="playerL.png";
             else document.getElementById("test").src="playerR.png";
-            if (Math.abs(i) > Math.abs(j)) {
-                i /= Math.abs(i);
-                j /= Math.abs(i);
-            }
-            else {
-                i /= Math.abs(j);
-                j /= Math.abs(j);   
-            }
+            var abs =  Math.abs(i) > Math.abs(j) ? Math.abs(i) : Math.abs(j);
+            i/=abs;
+            j/=abs;
             xpos -= i;
             ypos -= j;
             document.getElementById("player1").style.top = ypos + "px";
@@ -137,5 +132,5 @@ function close() {
 }
 
 function test() {
-    document.write(active);
+    document.getElementById("player1").style.top = "385.8px";
 }
