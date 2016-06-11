@@ -6,6 +6,7 @@
     xpos2 = 168;
     ypos2 = 386;
     slashf = 0;
+    c = 0;
     document.getElementById("player1").style.position = "relative";
     document.getElementById("player1").style.top = ypos + "px";
     document.getElementById("player1").style.left = xpos + "px";
@@ -111,14 +112,20 @@ function slash() {
             j = ypos - ypos2;
             if (i > 0) document.getElementById("test").src="playerL.png";
             else document.getElementById("test").src="playerR.png";
+            if (Math.abs(i) < 50 && Math.abs(j) < 90) {
+                skystatus = 'c';
+                close(i , j);
+            }
+            else {
             var abs =  Math.abs(i) > Math.abs(j) ? Math.abs(i) : Math.abs(j);
             i/=abs;
             j/=abs;
-            xpos -= i;
-            ypos -= j;
+            xpos -= i*3;
+            ypos -= j*3;
             document.getElementById("player1").style.top = ypos + "px";
             document.getElementById("player1").style.left = xpos + "px";
             slash();
+            }
         },1)
         if ((ypos == ypos2) && (xpos == xpos2)) {
             slashf = 0;
@@ -127,10 +134,33 @@ function slash() {
     }
 }
 
-function close() {
-    
+function close(a,b) {
+    ta = a;
+    tb = b;
+    if (c < 50) {
+        if (skystatus == 'c') {
+            setTimeout(function(){
+                var abs =  Math.abs(a) > Math.abs(b) ? Math.abs(a) : Math.abs(b);
+                a /=abs;
+                b /=abs;
+                xpos -= a*3;
+                ypos -= b*3;
+                document.getElementById("player1").style.top = ypos + "px";
+                document.getElementById("player1").style.left = xpos + "px";
+                c++;
+                close(a,b);
+            },1)
+        }
+    }
+    else {
+        c = 0;
+        slashf = 0;
+        jsta = 0;
+        skystatus = 'j';
+        jump(jsta);
+    }
 }
 
 function test() {
-    document.getElementById("player1").style.top = "385.8px";
+    document.write(skystatus);
 }
