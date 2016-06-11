@@ -1,10 +1,11 @@
 ﻿function ini() {
     xpos = -168; //紀錄目前位置
     active = 0; //to record the move state , 1 for left , 2 for right , 0 for still
-    skystatus = 'g'; // 'g' for ground , 'j' for jumping , 's' for slashing to anemy , 'w' for hooking the wall
+    // 'g' for ground , 'j' for jumping , 's' for slashing to anemy , 'c' for get close animation after slash, 'w' for hooking the wall
+    skystatus = 'g';
     ypos = 386;
     xpos2 = 168;
-    ypos2 = 386;
+    ypos2 = 186;
     slashf = 0;
     c = 0;
     document.getElementById("player1").style.position = "relative";
@@ -19,7 +20,7 @@
 
 function move(event) {
     var myevent = event ? event : window.event;
-    if (myevent.keyCode == 90) {
+    if ((myevent.keyCode == 90) && (skystatus != 's') && (skystatus != 'c')) {
         skystatus = 's';
         slashf = 1;
         slash();
@@ -143,8 +144,12 @@ function close(a,b) {
                 var abs =  Math.abs(a) > Math.abs(b) ? Math.abs(a) : Math.abs(b);
                 a /=abs;
                 b /=abs;
-                xpos -= a*3;
-                ypos -= b*3;
+                if (xpos <= -373) xpos = -373;
+                else if (xpos >= 377) xpos = 377;
+                else xpos -= a*3;
+                if (ypos <= 0) ypos = 0;
+                else if (ypos >= 386) ypos = 386;
+                else ypos -= b*3;
                 document.getElementById("player1").style.top = ypos + "px";
                 document.getElementById("player1").style.left = xpos + "px";
                 c++;
@@ -154,10 +159,10 @@ function close(a,b) {
     }
     else {
         c = 0;
-        slashf = 0;
-        jsta = 0;
         skystatus = 'j';
-        jump(jsta);
+        jstatus = 0;
+        jump(0);
+        slashf = 0;
     }
 }
 
