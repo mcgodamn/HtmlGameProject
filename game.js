@@ -5,7 +5,7 @@
     skystatus = 'g';
     ypos = 386;
     xpos2 = 168;
-    ypos2 = 186;
+    ypos2 = 386;
     slashf = 0;
     c = 0;
     document.getElementById("player1").style.position = "relative";
@@ -128,16 +128,9 @@ function slash() {
             slash();
             }
         },1)
-        if ((ypos == ypos2) && (xpos == xpos2)) {
-            slashf = 0;
-            skystatus = 'g';
-        }
     }
 }
-
 function close(a,b) {
-    ta = a;
-    tb = b;
     if (c < 50) {
         if (skystatus == 'c') {
             setTimeout(function(){
