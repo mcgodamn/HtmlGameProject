@@ -12,10 +12,16 @@
     document.getElementById("player1").style.top = ypos + "px";
     document.getElementById("player1").style.left = xpos + "px";
     document.getElementById("player2").style.position = "relative";
-    document.getElementById("player2").style.top = (ypos2 - 94) + "px";
+    document.getElementById("player2").style.top = (ypos2 - 100) + "px";
     document.getElementById("player2").style.left = xpos2 + "px";
     document.addEventListener('keydown', move, false);
     document.addEventListener('keyup', move2, false);
+    // var canvas=document.getElementById("canv");
+    // var cxt=c.getContext("2d");
+    // cxt.moveTo(10,10);
+    // cxt.lineTo(150,50);
+    // cxt.lineTo(10,50);
+    // cxt.stroke();
 }
 
 function move(event) {

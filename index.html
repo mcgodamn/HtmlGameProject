@@ -5,6 +5,9 @@
 	<title>index</title>
 	<script src="game.js"></script>
 	<style type = "text/css">
+					body {
+						background: gray;
+					}
 					div.bg {
 						width: 800px;
 						height: 480px;
@@ -14,6 +17,18 @@
 						position: relative;
 						top: 100px;
 					}
+					.ab1 {
+						position: absolute;
+						top: 50px;
+						left: 600px;
+						z-index: 1;
+					}
+					.ab0 {
+						position: absolute;
+						top: 50px;
+						left: 600px;
+						z-index: 0;
+					}
 	</style>
 </head>
 <body onload="ini()">
@@ -21,7 +36,8 @@
 <table width="100%">
     <tr>
         <td align="center">
-            <div class="bg">
+        	<canvas id="canv" width="800" height="480" class="ab1"></canvas>
+            <div class="bg ab0">
                 <div id="player1">
                     <img id="test" src="playerR.png" alt="fuck">
                 </div>
