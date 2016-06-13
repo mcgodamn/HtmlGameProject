@@ -19,6 +19,7 @@
     document.addEventListener('keydown', move, false);
     document.addEventListener('keyup', move2, false);
     canvas = document.getElementById("canv");
+    cxt =  canvas.getContext("2d");
     // var cxt=c.getContext("2d");
     // cxt.moveTo(10,10);
     // cxt.lineTo(150,50);
@@ -28,17 +29,96 @@
 
 function move(event) {
     var myevent = event ? event : window.event;
-    if ((myevent.keyCode == 90) && (skystatus != 's') && (skystatus != 'c')) {
+    if ((myevent.keyCode == 90) && (skystatus != 's') && (skystatus != 'c')) { //z
+        cxt.clearRect(0, 0, canvas.width, canvas.height);
         skystatus = 's';
         swf = 1;
         slash();
     }
-    else if (myevent.keyCode == 88 && skystatus != 'w') {
-        skystatus = 'w';
-        swf = 1;
-        wall(upf,dof,active);
+    else if (myevent.keyCode == 88 && skystatus != 'w') { //x
+        cxt.clearRect(0, 0, canvas.width, canvas.height);
+        if (upf == 1 && active == 0) { //上
+            cxt.beginPath();
+            cxt.moveTo(xpos + 400,ypos + 40);
+            cxt.lineTo(xpos + 400, 0);
+            cxt.closePath();
+            cxt.stroke();
+            skystatus = 'w';
+            swf = 1;
+            wall(upf,dof,active);
+        }
+        else if (dof == 1 && active == 0 && skystatus != 'g') { //下
+            cxt.beginPath();
+            cxt.moveTo(xpos + 400,ypos + 40);
+            cxt.lineTo(xpos + 400, 480);
+            cxt.closePath();
+            cxt.stroke();
+            skystatus = 'w';
+            swf = 1;
+            wall(upf,dof,active);
+        }
+        else if (upf == 0 && dof ==0 && active == 1) { //右
+            cxt.beginPath();
+            cxt.moveTo(xpos + 400,ypos + 40);
+            cxt.lineTo(0, ypos + 40);
+            cxt.closePath();
+            cxt.stroke();
+            skystatus = 'w';
+            swf = 1;
+            wall(upf,dof,active);
+        }
+        else if (upf == 0 && dof ==0 && active == 2) { //左
+            cxt.beginPath();
+            cxt.moveTo(xpos + 400,ypos + 40);
+            cxt.lineTo(800, ypos + 40);
+            cxt.closePath();
+            cxt.stroke();
+            skystatus = 'w';
+            swf = 1;
+            wall(upf,dof,active);
+        }
+        else if (upf == 1 && active == 2) { //左上
+            cxt.beginPath();
+            cxt.moveTo(xpos + 400,ypos + 40);
+            cxt.lineTo(800, ypos + 40 - (400-xpos));
+            cxt.closePath();
+            cxt.stroke();
+            skystatus = 'w';
+            swf = 1;
+            wall(upf,dof,active);
+        }
+        else if (upf == 1 && active == 1) { //右上
+            cxt.beginPath();
+            cxt.moveTo(xpos + 400,ypos + 40);
+            cxt.lineTo(0, ypos + 40 - (400+xpos));
+            cxt.closePath();
+            cxt.stroke();
+            skystatus = 'w';
+            swf = 1;
+            wall(upf,dof,active);
+        }
+        else if (dof == 1 && active == 1 && skystatus != 'g') { //左下
+            cxt.beginPath();
+            cxt.moveTo(xpos + 400,ypos + 40);
+            cxt.lineTo(xpos + ypos - 40, 480);
+            cxt.closePath();
+            cxt.stroke();
+            skystatus = 'w';
+            swf = 1;
+            wall(upf,dof,active);
+        }
+        else if (dof == 1 && active == 2 && skystatus != 'g') { //右下
+            cxt.beginPath();
+            cxt.moveTo(xpos + 400,ypos + 40);
+            cxt.lineTo(xpos + 840 - ypos, 480);
+            cxt.closePath();
+            cxt.stroke();
+            skystatus = 'w';
+            swf = 1;
+            wall(upf,dof,active);
+        }
     }
-    if ((myevent.keyCode == 32) && (skystatus == 'g')) {
+    if ((myevent.keyCode == 32) && (skystatus == 'g')) { //space
         skystatus = 'j';
         jstatus = 1; // 1 up , 0 down
         jump(jstatus);
@@ -186,19 +266,20 @@ function wall(u,d,v) {
     else if ( d == 1) hori = 1;
     else hori = 0;
     var verti = v;
+    var cleary;
+    var clearx;
     if (skystatus == 'w') {
-        var cxt = canvas.getContext("2d");
-        cxt.beginPath();
-        cxt.lineWidth = 3;
         setTimeout(function(){
-            if (hori == 2 && verti == 0) {
-                cxt.closePath();
-                ypos-=1;
-                document.getElementById("player1").style.top = ypos + "px";
-                cxt.moveTo(xpos + 400,ypos + 40);
-                cxt.lineTo(xpos +400, 0);
-                cxt.stroke();
-                wall(1,0,0);
+            if (ypos > 0 && (xpos > -373 && xpos < 377)) {
+                if (hori == 2 && verti == 0) {
+                    cxt.lineWidth = 3;
+                    cleary = ypos + 40;
+                    clearx = xpos + 380;
+                    ypos-=3;
+                    document.getElementById("player1").style.top = ypos + "px";
+                    cxt.clearRect(clearx, cleary, 30, 3);
+                    wall(1,0,0);
+                }
             }
         },1)
     }
