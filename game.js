@@ -6,8 +6,10 @@
     ypos = 386;
     xpos2 = 168;
     ypos2 = 386;
-    slashf = 0;
+    swf = 0; //slash and wall flag
     c = 0;
+    upf = 0; //up arrow flag
+    dof = 0; //down arrow flag
     document.getElementById("player1").style.position = "relative";
     document.getElementById("player1").style.top = ypos + "px";
     document.getElementById("player1").style.left = xpos + "px";
@@ -16,7 +18,7 @@
     document.getElementById("player2").style.left = xpos2 + "px";
     document.addEventListener('keydown', move, false);
     document.addEventListener('keyup', move2, false);
-    // var canvas=document.getElementById("canv");
+    canvas = document.getElementById("canv");
     // var cxt=c.getContext("2d");
     // cxt.moveTo(10,10);
     // cxt.lineTo(150,50);
@@ -28,38 +30,51 @@ function move(event) {
     var myevent = event ? event : window.event;
     if ((myevent.keyCode == 90) && (skystatus != 's') && (skystatus != 'c')) {
         skystatus = 's';
-        slashf = 1;
+        swf = 1;
         slash();
     }
-    else if (myevent.keyCode == 88) {
+    else if (myevent.keyCode == 88 && skystatus != 'w') {
         skystatus = 'w';
-        wall();
+        swf = 1;
+        wall(upf,dof,active);
     }
     if ((myevent.keyCode == 32) && (skystatus == 'g')) {
         skystatus = 'j';
         jstatus = 1; // 1 up , 0 down
         jump(jstatus);
     }
-    if ((myevent.keyCode == 37) && (active != 1) && (slashf == 0)) {
+    if ((myevent.keyCode == 37) && (active != 1)) {
         active = 1;
-        document.getElementById("test").src="playerL.png";
-        left();
+        if (swf == 0) {
+            document.getElementById("test").src="playerL.png";
+            left();
+        }
     }
-    else if ((myevent.keyCode == 39) && (active != 2) && (slashf == 0)) {
+    else if ((myevent.keyCode == 39) && (active != 2)) {
         active = 2;
-        document.getElementById("test").src="playerR.png";
-        right();
+        if (swf == 0) {
+            document.getElementById("test").src="playerR.png";
+            right();   
+        }
+    }
+    if (myevent.keyCode == 38) {
+        upf = 1;
+        dof = 0;
+    }
+    else if (myevent.keyCode == 40) {
+        dof = 1;
+        upf = 0;
     }
 }
 
 function move2(event2) {
     var myevent = event2 ? event2 : window.event;
-    if (myevent.keyCode == 37 && active == 1) {
-        active = 0;
-    }
-    else if (myevent.keyCode == 39 && active == 2) {
-        active = 0;
-    }
+
+    if (myevent.keyCode == 37 && active == 1) active = 0;
+    else if (myevent.keyCode == 39 && active == 2) active = 0;
+
+    if (myevent.keyCode == 38 && upf == 1) upf = 0;
+    else if (myevent.keyCode == 38 && dof == 1) dof = 0;
 }
 
 function left() {
@@ -127,8 +142,8 @@ function slash() {
             var abs =  Math.abs(i) > Math.abs(j) ? Math.abs(i) : Math.abs(j);
             i/=abs;
             j/=abs;
-            xpos -= i*3;
-            ypos -= j*3;
+            xpos -= i*4;
+            ypos -= j*4;
             document.getElementById("player1").style.top = ypos + "px";
             document.getElementById("player1").style.left = xpos + "px";
             slash();
@@ -161,7 +176,31 @@ function close(a,b) {
         skystatus = 'j';
         jstatus = 0;
         jump(0);
-        slashf = 0;
+        swf = 0;
+    }
+}
+
+function wall(u,d,v) {
+    var hori;// 2 for up ,1 for down ,0 for still
+    if (u == 1) hori = 2;
+    else if ( d == 1) hori = 1;
+    else hori = 0;
+    var verti = v;
+    if (skystatus == 'w') {
+        var cxt = canvas.getContext("2d");
+        cxt.beginPath();
+        cxt.lineWidth = 3;
+        setTimeout(function(){
+            if (hori == 2 && verti == 0) {
+                cxt.closePath();
+                ypos-=1;
+                document.getElementById("player1").style.top = ypos + "px";
+                cxt.moveTo(xpos + 400,ypos + 40);
+                cxt.lineTo(xpos +400, 0);
+                cxt.stroke();
+                wall(1,0,0);
+            }
+        },1)
     }
 }
 
