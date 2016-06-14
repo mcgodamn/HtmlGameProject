@@ -20,6 +20,7 @@
     document.addEventListener('keyup', move2, false);
     canvas = document.getElementById("canv");
     cxt =  canvas.getContext("2d");
+    cxt.lineWidth = 3;
     // var cxt=c.getContext("2d");
     // cxt.moveTo(10,10);
     // cxt.lineTo(150,50);
@@ -270,9 +271,8 @@ function wall(u,d,v) {
     var clearx;
     if (skystatus == 'w') {
         setTimeout(function(){
-            if (ypos > 0 && (xpos > -373 && xpos < 377)) {
-                if (hori == 2 && verti == 0) {
-                    cxt.lineWidth = 3;
+            if ((ypos >= 0 && ypos <= 386) && (xpos >= -373 && xpos <= 377)) {
+                if (hori == 2 && verti == 0) { //上
                     cleary = ypos + 40;
                     clearx = xpos + 380;
                     ypos-=3;
@@ -280,7 +280,27 @@ function wall(u,d,v) {
                     cxt.clearRect(clearx, cleary, 30, 3);
                     wall(1,0,0);
                 }
+                else if (hori == 1 && verti == 0) { //下
+                    cleary = ypos+30;
+                    clearx = xpos + 380;
+                    ypos+=3;
+                    document.getElementById("player1").style.top = ypos + "px";
+                    cxt.clearRect(clearx, cleary, 30, 3);
+                    wall(0,1,0);
+                }
+
+                else if (hori == 2 && verti == 1) { //右上
+                    cleary = ypos+40;
+                    clearx = xpos + 380;
+                    xpos+=3;
+                    ypos-=3;
+                    document.getElementById("player1").style.left = xpos + "px";
+                    document.getElementById("player1").style.top = ypos + "px";
+                    cxt.clearRect(clearx, cleary, 30, 3);
+                    wall(1,0,1);
+                }
             }
+            else if (hori == 1 && verti == 0) cxt.clearRect(0, 0, canvas.width, canvas.height);
         },1)
     }
 }
