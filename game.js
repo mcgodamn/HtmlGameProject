@@ -288,19 +288,17 @@ function wall(u,d,v) {
                     cxt.clearRect(clearx, cleary, 30, 3);
                     wall(0,1,0);
                 }
-
-                else if (hori == 2 && verti == 1) { //右上
-                    cleary = ypos+40;
+                else if (hori == 0 && verti == 1) { //左
+                    cleary = ypos+30;
                     clearx = xpos + 380;
-                    xpos+=3;
-                    ypos-=3;
-                    document.getElementById("player1").style.left = xpos + "px";
+                    xpos-=3;
                     document.getElementById("player1").style.top = ypos + "px";
                     cxt.clearRect(clearx, cleary, 30, 3);
-                    wall(1,0,1);
+                    wall(0,0,1);
                 }
+
             }
-            else if (hori == 1 && verti == 0) cxt.clearRect(0, 0, canvas.width, canvas.height);
+            else if ((hori == 1 && verti == 0) ||(hori == 0 && verti == 1)) cxt.clearRect(0, 0, canvas.width, canvas.height);
         },1)
     }
 }
