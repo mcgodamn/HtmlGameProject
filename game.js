@@ -10,6 +10,7 @@ function ini() {
     c = 0;
     upf = 0; //up arrow flag
     dof = 0; //down arrow flag
+    wd = 0; //wall時的方向，1是上，順時針方向
     document.getElementById("player1").style.position = "relative";
     document.getElementById("player1").style.top = ypos + "px";
     document.getElementById("player1").style.left = xpos + "px";
@@ -37,9 +38,10 @@ function move(event) {
         swf = 1;
         slash();
     }
-    else if (myevent.keyCode == 88 && skystatus != 'w') { //x
+    else if (myevent.keyCode == 88) { //x
         cxt.clearRect(0, 0, canvas.width, canvas.height);
-        if (upf == 1 && active == 0) { //上
+        if (upf == 1 && active == 0 && wd != 1) { //上
+            wd = 1;
             wallv = 0;
             cxt.beginPath();
             cxt.moveTo(xpos + 400,ypos + 40);
@@ -50,7 +52,8 @@ function move(event) {
             swf = 1;
             wall(upf,dof,wallv);
         }
-        else if (dof == 1 && active == 0 && skystatus != 'g') { //下
+        else if (dof == 1 && active == 0 && skystatus != 'g' && wd != 5) { //下
+            wd = 5;
             wallv = 0;
             cxt.beginPath();
             cxt.moveTo(xpos + 400,ypos + 40);
@@ -61,7 +64,8 @@ function move(event) {
             swf = 1;
             wall(upf,dof,wallv);
         }
-        else if (upf == 0 && dof ==0 && active == 1) { //右
+        else if (upf == 0 && dof ==0 && active == 1 && wd != 3) { //右
+            wd = 3;
             wallv = 1;
             cxt.beginPath();
             cxt.moveTo(xpos + 400,ypos + 40);
@@ -72,7 +76,8 @@ function move(event) {
             swf = 1;
             wall(upf,dof,wallv);
         }
-        else if (upf == 0 && dof ==0 && active == 2) { //左
+        else if (upf == 0 && dof ==0 && active == 2 && wd != 7) { //左
+            wd = 7;
             wallv = 2;
             cxt.beginPath();
             cxt.moveTo(xpos + 400,ypos + 40);
@@ -83,7 +88,8 @@ function move(event) {
             swf = 1;
             wall(upf,dof,wallv);
         }
-        else if (upf == 1 && active == 2) { //左上
+        else if (upf == 1 && active == 2 && wd != 8) { //左上
+            wd = 8;
             wallv = 2;
             cxt.beginPath();
             cxt.moveTo(xpos + 400,ypos + 40);
@@ -94,7 +100,8 @@ function move(event) {
             swf = 1;
             wall(upf,dof,wallv);
         }
-        else if (upf == 1 && active == 1) { //右上
+        else if (upf == 1 && active == 1 && wd != 2) { //右上
+            wd = 2;
             wallv = 1;
             cxt.beginPath();
             cxt.moveTo(xpos + 400,ypos + 40);
@@ -105,7 +112,8 @@ function move(event) {
             swf = 1;
             wall(upf,dof,wallv);
         }
-        else if (dof == 1 && active == 1 && skystatus != 'g') { //左下
+        else if (dof == 1 && active == 1 && skystatus != 'g' && wd != 6) { //左下
+            wd = 6;
             wallv = 1;
             cxt.beginPath();
             cxt.moveTo(xpos + 400,ypos + 40);
@@ -116,7 +124,8 @@ function move(event) {
             swf = 1;
             wall(upf,dof,wallv);
         }
-        else if (dof == 1 && active == 2 && skystatus != 'g') { //右下
+        else if (dof == 1 && active == 2 && skystatus != 'g' && wd != 4) { //右下
+            wd = 4;
             wallv = 2;
             cxt.beginPath();
             cxt.moveTo(xpos + 400,ypos + 40);
@@ -284,7 +293,7 @@ function wall(u,d,v) {
     if (skystatus == 'w') {
         setTimeout(function(){
             if ((ypos >= 0 && ypos <= 386) && (xpos >= -373 && xpos <= 377)) {
-                if (hori == 2 && verti == 0) { //上
+                if (hori == 2 && verti == 0 && wd == 1) { //上
                     cleary = ypos + 40;
                     clearx = xpos + 380;
                     ypos-=3;
@@ -292,7 +301,7 @@ function wall(u,d,v) {
                     cxt.clearRect(clearx, cleary, 30, 3);
                     wall(1,0,0);
                 }
-                else if (hori == 1 && verti == 0) { //下
+                else if (hori == 1 && verti == 0 && wd == 5) { //下
                     cleary = ypos+30;
                     clearx = xpos + 380;
                     ypos+=3;
@@ -300,7 +309,7 @@ function wall(u,d,v) {
                     cxt.clearRect(clearx, cleary, 30, 3);
                     wall(0,1,0);
                 }
-                else if (hori == 0 && verti == 1) { //左
+                else if (hori == 0 && verti == 1 && wd == 3) { //左
                     xpos-=3;
                     cleary = ypos+30;
                     clearx = xpos + 400;
@@ -308,7 +317,7 @@ function wall(u,d,v) {
                     cxt.clearRect(clearx, cleary, 25, 30);
                     wall(0,0,1);
                 }
-                else if (hori == 0 && verti == 2) { //右
+                else if (hori == 0 && verti == 2 && wd == 7) { //右
                     xpos+=3;
                     cleary = ypos+30;
                     clearx = xpos + 380;
@@ -316,7 +325,7 @@ function wall(u,d,v) {
                     cxt.clearRect(clearx, cleary, 25, 30);
                     wall(0,0,2);
                 }
-                else if (hori == 2 && verti == 2) { //右上
+                else if (hori == 2 && verti == 2 && wd == 8) { //右上
                     ypos-=3;
                     xpos+=3;
                     cleary = ypos+30;
@@ -326,7 +335,7 @@ function wall(u,d,v) {
                     cxt.clearRect(clearx, cleary, 25, 30);
                     wall(1,0,2);
                 }
-                else if (hori == 2 && verti == 1) { //左上
+                else if (hori == 2 && verti == 1 && wd == 2) { //左上
                     ypos-=3;
                     xpos-=3;
                     cleary = ypos+30;
@@ -336,7 +345,7 @@ function wall(u,d,v) {
                     cxt.clearRect(clearx, cleary, 25, 30);
                     wall(1,0,1);
                 }
-                else if (hori == 1 && verti == 2) { //右下
+                else if (hori == 1 && verti == 2 && wd == 6) { //右下
                     ypos+=3;
                     xpos+=3;
                     cleary = ypos+30;
@@ -346,7 +355,7 @@ function wall(u,d,v) {
                     cxt.clearRect(clearx, cleary, 25, 30);
                     wall(0,1,2);
                 }
-                else if (hori == 1 && verti == 1) { //左下
+                else if (hori == 1 && verti == 1 && wd == 4) { //左下
                     ypos+=3;
                     xpos-=3;
                     cleary = ypos+30;
@@ -365,7 +374,6 @@ function wall(u,d,v) {
         },1)
     }
 }
-
 function test() {
     document.write(skystatus);
 }
