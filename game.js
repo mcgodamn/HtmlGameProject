@@ -34,6 +34,7 @@ function move(event) {
     var myevent = event ? event : window.event;
     var wallv;
     if ((myevent.keyCode == 90) && (skystatus != 's') && (skystatus != 'c') && sactive == 0) { //z
+        wd = 0;
         sactive = 1;
         cxt.clearRect(0, 0, canvas.width, canvas.height);
         skystatus = 's';
@@ -261,14 +262,28 @@ function close(a,b) {
         if (skystatus == 'c') {
             setTimeout(function(){
                 var abs =  Math.abs(a) > Math.abs(b) ? Math.abs(a) : Math.abs(b);
-                a /=abs;
-                b /=abs;
-                if (xpos <= -373) xpos = -373;
-                else if (xpos >= 377) xpos = 377;
-                else xpos -= a*3;
-                if (ypos <= 0) ypos = 0;
-                else if (ypos >= 386) ypos = 386;
-                else ypos -= b*3;
+                a /=abs; //i ,x-index
+                b /=abs; //j ,y-index
+                if (Math.abs(b) > Math.abs(a) && ypos >= 386) {
+                    ypos = 386;
+                    xpos -= (a/Math.abs(a))*4;
+                }
+                else if (Math.abs(a) > Math.abs(b) && xpos >= 377) {
+                    xpos = 377;
+                    ypos -= (b/Math.abs(b))*4;
+                }
+                else if (Math.abs(a) > Math.abs(b) && xpos <= -373) {
+                    xpos = -373;
+                    ypos -= (b/Math.abs(b))*4;
+                }
+                else {
+                    if (xpos <= -373) xpos = -373;
+                    else if (xpos >= 377) xpos = 377;
+                    else xpos -= a*3;
+                    if (ypos <= 0) ypos = 0;
+                    else if (ypos >= 386) ypos = 386;
+                    else ypos -= b*3;
+                }
                 document.getElementById("player1").style.top = ypos + "px";
                 document.getElementById("player1").style.left = xpos + "px";
                 c++;
@@ -328,6 +343,7 @@ function wall(u,d,v) {
                     }
                 }
                 else if (hori == 0 && verti == 1 && wd == 3) { //左
+                    document.getElementById("test").src="playerL.png";
                     if (xpos > -373) {
                         xpos-=3;
                         cleary = ypos+30;
@@ -342,6 +358,7 @@ function wall(u,d,v) {
                     }
                 }
                 else if (hori == 0 && verti == 2 && wd == 7) { //右
+                    document.getElementById("test").src="playerR.png";
                     if (xpos < 377) {
                         xpos+=3;
                         cleary = ypos+30;
@@ -357,6 +374,7 @@ function wall(u,d,v) {
                     
                 }
                 else if (hori == 2 && verti == 2 && wd == 8) { //右上
+                    document.getElementById("test").src="playerR.png";
                     if (xpos < 377 && ypos > 0) {
                         ypos-=3;
                         xpos+=3;
@@ -383,6 +401,7 @@ function wall(u,d,v) {
                     }
                 }
                 else if (hori == 2 && verti == 1 && wd == 2) { //左上
+                    document.getElementById("test").src="playerL.png";
                     if (xpos > -373 && ypos > 0) {
                         ypos-=3;
                         xpos-=3;
@@ -409,6 +428,7 @@ function wall(u,d,v) {
                     }
                 }
                 else if (hori == 1 && verti == 2 && wd == 4) { //右下
+                    document.getElementById("test").src="playerR.png";
                     if (xpos < 377 && ypos < 386) {
                         ypos+=3;
                         xpos+=3;
@@ -438,6 +458,7 @@ function wall(u,d,v) {
                     }
                 }
                 else if (hori == 1 && verti == 1 && wd == 6) { //左下
+                    document.getElementById("test").src="playerL.png";
                     if (xpos > -373 && ypos < 386) {
                         ypos+=3;
                         xpos-=3;
