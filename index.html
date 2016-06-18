@@ -9,34 +9,39 @@
 						background: gray;
 					}
 					div.bg {
-						width: 800px;
-						height: 480px;
+						width: 1200px;
+						height: 750px;
 						background: url("background.png");
 					}
 					td {
 						position: relative;
-						top: 100px;
+						top: 30px;
+					}
+					.ab2 {
+						position: absolute;
+						left: 360px;
+						z-index: 2;
 					}
 					.ab1 {
 						position: absolute;
-						top: 50px;
-						left: 560px;
+						left: 360px;
 						z-index: 1;
 					}
 					.ab0 {
 						position: absolute;
-						top: 50px;
-						left: 560px;
+						left: 360px;
 						z-index: 0;
 					}
 	</style>
 </head>
 <body onload="ini()">
-<button onclick="test()">test</button>
-<table width="100%">
+<!-- <button onclick="test()">test</button> -->
+<p id="result">welcome</p>
+<table width="100%" border="0">
     <tr>
         <td align="center">
-        	<canvas id="canv" width="800" height="480" class="ab1"></canvas>
+        	<canvas id="canv" width="1200" height="750" class="ab2"></canvas>
+        	<canvas id="canv2" width="1200" height="750" class="ab1"></canvas>
             <div class="bg ab0">
                 <div id="player1" style="z-index: 2;">
                     <img id="test" src="playerR.png" alt="fuck">
