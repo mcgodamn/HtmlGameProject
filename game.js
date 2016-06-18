@@ -39,12 +39,23 @@ function ini() {
     canvas2 = document.getElementById("canv2");
     cxt2 =  canvas2.getContext("2d");
     cxt2.lineWidth = 3;
+    bf = 0;
+    bf2 = 0;
+    blockl = 0;
+    blockr = 0;
+    blockl2 = 0;
+    blockr2 = 0;
+    ss = 0; //斬殺衝突(紀錄誰先砍誰)
 }
 
 function move(event) {
     var myevent = event ? event : window.event;
     var wallv;
-    if ((myevent.keyCode == 84) && (skystatus != 's') && (skystatus != 'c') && sactive == 0) { //z
+    if ((myevent.keyCode == 84) && (skystatus != 's') && (skystatus != 'c') && sactive == 0) { //t
+        if (skystatus2 == 's') ss = 1;
+        bf = 0;
+        blockl = 0;
+        blockr = 0;
         wd = 0;
         sactive = 1;
         cxt.clearRect(0, 0, canvas.width, canvas.height);
@@ -53,8 +64,9 @@ function move(event) {
         slash();
     }
     else if (myevent.keyCode == 82) { //r
-        cxt.clearRect(0, 0, canvas.width, canvas.height);
         if (upf == 1 && active == 0 && wd != 1) { //上
+            if (ss == 1) ss = 0;
+            cxt.clearRect(0, 0, canvas.width, canvas.height);
             wd = 1;
             wallv = 0;
             cxt.beginPath();
@@ -67,6 +79,8 @@ function move(event) {
             wall(upf,dof,wallv);
         }
         else if (dof == 1 && active == 0 && skystatus != 'g' && wd != 5) { //下
+            if (ss == 1) ss = 0;
+            cxt.clearRect(0, 0, canvas.width, canvas.height);
             wd = 5;
             wallv = 0;
             cxt.beginPath();
@@ -79,6 +93,8 @@ function move(event) {
             wall(upf,dof,wallv);
         }
         else if (upf == 0 && dof ==0 && active == 1 && wd != 3) { //右
+            if (ss == 1) ss = 0;
+            cxt.clearRect(0, 0, canvas.width, canvas.height);
             wd = 3;
             wallv = 1;
             cxt.beginPath();
@@ -91,6 +107,8 @@ function move(event) {
             wall(upf,dof,wallv);
         }
         else if (upf == 0 && dof ==0 && active == 2 && wd != 7) { //左
+            if (ss == 1) ss = 0;
+            cxt.clearRect(0, 0, canvas.width, canvas.height);
             wd = 7;
             wallv = 2;
             cxt.beginPath();
@@ -103,6 +121,8 @@ function move(event) {
             wall(upf,dof,wallv);
         }
         else if (upf == 1 && active == 2 && wd != 8) { //左上
+            if (ss == 1) ss = 0;
+            cxt.clearRect(0, 0, canvas.width, canvas.height);
             wd = 8;
             wallv = 2;
             cxt.beginPath();
@@ -115,6 +135,8 @@ function move(event) {
             wall(upf,dof,wallv);
         }
         else if (upf == 1 && active == 1 && wd != 2) { //右上
+            if (ss == 1) ss = 0;
+            cxt.clearRect(0, 0, canvas.width, canvas.height);
             wd = 2;
             wallv = 1;
             cxt.beginPath();
@@ -127,6 +149,8 @@ function move(event) {
             wall(upf,dof,wallv);
         }
         else if (dof == 1 && active == 1 && skystatus != 'g' && wd != 6) { //左下
+            if (ss == 1) ss = 0;
+            cxt.clearRect(0, 0, canvas.width, canvas.height);
             wd = 6;
             wallv = 1;
             cxt.beginPath();
@@ -139,6 +163,8 @@ function move(event) {
             wall(upf,dof,wallv);
         }
         else if (dof == 1 && active == 2 && skystatus != 'g' && wd != 4) { //右下
+            if (ss == 1) ss = 0;
+            cxt.clearRect(0, 0, canvas.width, canvas.height);
             wd = 4;
             wallv = 2;
             cxt.beginPath();
@@ -151,19 +177,31 @@ function move(event) {
             wall(upf,dof,wallv);
         }
     }
+    else if (myevent.keyCode == 89 && skystatus != 's') {
+        if (active == 1) {
+            bf = 1;
+            blockl = 1;
+            blockr = 0;
+        }
+        else if (active == 2) {
+            bf = 1;
+            blockr = 1;
+            blockl = 0;
+        }
+    }
     if ((myevent.keyCode == 32) && (skystatus == 'g')) { //space
         skystatus = 'j';
         jstatus = 1; // 1 up , 0 down
         jump(jstatus);
     }
-    if ((myevent.keyCode == 65) && (active != 1)) {
+    if ((myevent.keyCode == 65) && (active != 1) && (bf != 1)) {
         active = 1;
         if (swf == 0) {
             document.getElementById("test").src="playerL.png";
             left();
         }
     }
-    else if ((myevent.keyCode == 68) && (active != 2)) {
+    else if ((myevent.keyCode == 68) && (active != 2) && (bf != 1)) {
         active = 2;
         if (swf == 0) {
             document.getElementById("test").src="playerR.png";
@@ -191,15 +229,20 @@ function move2(event2) {
     if (myevent.keyCode == 87 && upf == 1) upf = 0;
     else if (myevent.keyCode == 83 && dof == 1) dof = 0;
     if (myevent.keyCode == 84) sactive = 0;
+    if (myevent.keyCode == 89 && bf == 1) {
+        bf = 0;
+        blockl = 0;
+        blockr = 0;
+    }
 }
 
 function left() {
-    if ((active == 1) && (xpos > -373) && (swf == 0)) {
+    if ((active == 1) && (xpos > -373) && (swf == 0) && (bf != 1)) {
         xpos -= 3;
         document.getElementById("player1").style.left = xpos + "px";
         setTimeout("left()", 1);
     }
-    else if ((active == 1) && (xpos <= -373) && (swf == 0)) {
+    else if ((active == 1) && (xpos <= -373) && (swf == 0) && (bf != 1)) {
         xpos = -373;
         document.getElementById("player1").style.left = xpos + "px";
         active = 0;
@@ -207,12 +250,12 @@ function left() {
 }
 
 function right() {
-    if ((active == 2) && (xpos < 377) && (swf == 0)) {
+    if ((active == 2) && (xpos < 377) && (swf == 0) && (bf != 1)) {
         xpos += 3;
         document.getElementById("player1").style.left = xpos + "px";
         setTimeout("right()", 1);;
     }
-    else if ((active == 2) && (xpos >= 377) && (swf == 0)) {
+    else if ((active == 2) && (xpos >= 377) && (swf == 0) && (bf != 1)) {
         xpos = 377;
         document.getElementById("player1").style.left = xpos + "px";
         active = 0;
@@ -250,7 +293,7 @@ function slash() {
             j = ypos - ypos2;
             if (i > 0) document.getElementById("test").src="playerL.png";
             else document.getElementById("test").src="playerR.png";
-            if (Math.abs(i) < 50 && Math.abs(j) < 90) {
+            if (Math.abs(i) < 27 && Math.abs(j) < 47) {
                 skystatus = 'c';
                 close(i , j);
             }
@@ -272,19 +315,32 @@ function close(a,b) {
         if (skystatus == 'c') {
             setTimeout(function(){
                 var abs =  Math.abs(a) > Math.abs(b) ? Math.abs(a) : Math.abs(b);
+                if ((ss == 2) || (a < 0 && blockl2 != 1) || (a > 0 && blockr2 != 1) || (skystatus == 'w' && xpos2 == xpos)) {
+                    document.removeEventListener('keydown', move, false);
+                    document.removeEventListener('keydown', move3, false);
+                    document.removeEventListener('keyup', move2, false);
+                    document.removeEventListener('keyup', move4, false);
+                    document.getElementById("result").innerHTML = "PALYER1 WIN!!";
+                }
                 a /=abs; //i ,x-index
                 b /=abs; //j ,y-index
                 if (Math.abs(b) > Math.abs(a) && ypos >= 386) {
                     ypos = 386;
-                    xpos -= (a/Math.abs(a))*4;
+                    if (xpos <= -373) xpos = -373;
+                    else if (xpos >= 377) xpos = 377;
+                    else xpos -= (a/Math.abs(a))*4;
                 }
                 else if (Math.abs(a) > Math.abs(b) && xpos >= 377) {
                     xpos = 377;
-                    ypos -= (b/Math.abs(b))*4;
+                    if (ypos <= 0) ypos = 0;
+                    else if (ypos >= 386) ypos = 386;
+                    else ypos -= (b/Math.abs(b))*4;
                 }
                 else if (Math.abs(a) > Math.abs(b) && xpos <= -373) {
                     xpos = -373;
-                    ypos -= (b/Math.abs(b))*4;
+                    if (ypos <= 0) ypos = 0;
+                    else if (ypos >= 386) ypos = 386;
+                    else ypos -= (b/Math.abs(b))*4;
                 }
                 else {
                     if (xpos <= -373) xpos = -373;
@@ -324,24 +380,23 @@ function wall(u,d,v) {
                     if (ypos > 0) {
                         cleary = ypos + 40;
                         clearx = xpos + 380;
-                        ypos-=3;
+                        ypos-=4;
                         document.getElementById("player1").style.top = ypos + "px";
-                        cxt.clearRect(clearx, cleary, 30, 3);
+                        cxt.clearRect(clearx, cleary, 30, 4);
                         wall(1,0,0); 
                     }
                     else {
                         ypos = 0;
                         document.getElementById("player1").style.top = ypos + "px";
                     }
-                    
                 }
                 else if (hori == 1 && verti == 0 && wd == 5) { //下
                     if (ypos < 386) {
                         cleary = ypos+30;
                         clearx = xpos + 380;
-                        ypos+=3;
+                        ypos+=4;
                         document.getElementById("player1").style.top = ypos + "px";
-                        cxt.clearRect(clearx, cleary, 30, 3);
+                        cxt.clearRect(clearx, cleary, 30, 4);
                         wall(0,1,0);
                     }
                     else {
@@ -355,7 +410,7 @@ function wall(u,d,v) {
                 else if (hori == 0 && verti == 1 && wd == 3) { //左
                     document.getElementById("test").src="playerL.png";
                     if (xpos > -373) {
-                        xpos-=3;
+                        xpos-=4;
                         cleary = ypos+30;
                         clearx = xpos + 400;
                         document.getElementById("player1").style.left = xpos + "px";
@@ -370,7 +425,7 @@ function wall(u,d,v) {
                 else if (hori == 0 && verti == 2 && wd == 7) { //右
                     document.getElementById("test").src="playerR.png";
                     if (xpos < 377) {
-                        xpos+=3;
+                        xpos+=4;
                         cleary = ypos+30;
                         clearx = xpos + 380;
                         document.getElementById("player1").style.left = xpos + "px";
@@ -386,8 +441,8 @@ function wall(u,d,v) {
                 else if (hori == 2 && verti == 2 && wd == 8) { //右上
                     document.getElementById("test").src="playerR.png";
                     if (xpos < 377 && ypos > 0) {
-                        ypos-=3;
-                        xpos+=3;
+                        ypos-=4;
+                        xpos+=4;
                         cleary = ypos+30;
                         clearx = xpos + 380;
                         document.getElementById("player1").style.left = xpos + "px";
@@ -413,8 +468,8 @@ function wall(u,d,v) {
                 else if (hori == 2 && verti == 1 && wd == 2) { //左上
                     document.getElementById("test").src="playerL.png";
                     if (xpos > -373 && ypos > 0) {
-                        ypos-=3;
-                        xpos-=3;
+                        ypos-=4;
+                        xpos-=4;
                         cleary = ypos+30;
                         clearx = xpos + 380;
                         document.getElementById("player1").style.left = xpos + "px";
@@ -440,8 +495,8 @@ function wall(u,d,v) {
                 else if (hori == 1 && verti == 2 && wd == 4) { //右下
                     document.getElementById("test").src="playerR.png";
                     if (xpos < 377 && ypos < 386) {
-                        ypos+=3;
-                        xpos+=3;
+                        ypos+=4;
+                        xpos+=4;
                         cleary = ypos+30;
                         clearx = xpos+380;
                         document.getElementById("player1").style.left = xpos + "px";
@@ -470,8 +525,8 @@ function wall(u,d,v) {
                 else if (hori == 1 && verti == 1 && wd == 6) { //左下
                     document.getElementById("test").src="playerL.png";
                     if (xpos > -373 && ypos < 386) {
-                        ypos+=3;
-                        xpos-=3;
+                        ypos+=4;
+                        xpos-=4;
                         cleary = ypos+30;
                         clearx = xpos+380;
                         document.getElementById("player1").style.left = xpos + "px";
@@ -510,6 +565,10 @@ function move3(event) {
     var myevent = event ? event : window.event;
     var wallv;
     if ((myevent.keyCode == 219) && (skystatus2 != 's') && (skystatus2 != 'c') && sactive2 == 0) { //{
+        if (skystatus == 's') ss = 2;
+        bf2 = 0;
+        blockl2 = 0;
+        blockr2 = 0;
         wd2 = 0;
         sactive2 = 1;
         cxt2.clearRect(0, 0, canvas2.width, canvas2.height);
@@ -518,8 +577,9 @@ function move3(event) {
         slash2();
     }
     else if (myevent.keyCode == 221) { //}
-        cxt2.clearRect(0, 0, canvas2.width, canvas2.height);
         if (upf2 == 1 && active2 == 0 && wd2 != 1) { //上
+            if (ss == 2) ss = 0;
+            cxt2.clearRect(0, 0, canvas2.width, canvas2.height);
             wd2 = 1;
             wallv = 0;
             cxt2.beginPath();
@@ -532,6 +592,8 @@ function move3(event) {
             wall2(upf2,dof2,wallv);
         }
         else if (dof2 == 1 && active2 == 0 && skystatus2 != 'g' && wd2 != 5) { //下
+            if (ss == 2) ss = 0;
+            cxt2.clearRect(0, 0, canvas2.width, canvas2.height);
             wd2 = 5;
             wallv = 0;
             cxt2.beginPath();
@@ -544,6 +606,8 @@ function move3(event) {
             wall2(upf2,dof2,wallv);
         }
         else if (upf2 == 0 && dof2 ==0 && active2 == 1 && wd2 != 3) { //右
+            if (ss == 2) ss = 0;
+            cxt2.clearRect(0, 0, canvas2.width, canvas2.height);
             wd2 = 3;
             wallv = 1;
             cxt2.beginPath();
@@ -556,6 +620,8 @@ function move3(event) {
             wall2(upf2,dof2,wallv);
         }
         else if (upf2 == 0 && dof2 ==0 && active2 == 2 && wd2 != 7) { //左
+            if (ss == 2) ss = 0;
+            cxt2.clearRect(0, 0, canvas2.width, canvas2.height);
             wd2 = 7;
             wallv = 2;
             cxt2.beginPath();
@@ -568,6 +634,8 @@ function move3(event) {
             wall2(upf2,dof2,wallv);
         }
         else if (upf2 == 1 && active2 == 2 && wd2 != 8) { //左上
+            if (ss == 2) ss = 0;
+            cxt2.clearRect(0, 0, canvas2.width, canvas2.height);
             wd2 = 8;
             wallv = 2;
             cxt2.beginPath();
@@ -580,6 +648,8 @@ function move3(event) {
             wall2(upf2,dof2,wallv);
         }
         else if (upf2 == 1 && active2 == 1 && wd2 != 2) { //右上
+            if (ss == 2) ss = 0;
+            cxt2.clearRect(0, 0, canvas2.width, canvas2.height);
             wd2 = 2;
             wallv = 1;
             cxt2.beginPath();
@@ -592,6 +662,8 @@ function move3(event) {
             wall2(upf2,dof2,wallv);
         }
         else if (dof2 == 1 && active2 == 1 && skystatus2 != 'g' && wd2 != 6) { //左下
+            if (ss == 2) ss = 0;
+            cxt2.clearRect(0, 0, canvas2.width, canvas2.height);
             wd2 = 6;
             wallv = 1;
             cxt2.beginPath();
@@ -604,6 +676,8 @@ function move3(event) {
             wall2(upf2,dof2,wallv);
         }
         else if (dof2 == 1 && active2 == 2 && skystatus2 != 'g' && wd2 != 4) { //右下
+            if (ss == 2) ss = 0;
+            cxt2.clearRect(0, 0, canvas2.width, canvas2.height);
             wd2 = 4;
             wallv = 2;
             cxt2.beginPath();
@@ -614,6 +688,18 @@ function move3(event) {
             skystatus2 = 'w';
             swf2 = 1;
             wall2(upf2,dof2,wallv);
+        }
+    }
+    else if (myevent.keyCode == 220 && skystatus2 != 's') { //\
+        if (active2 == 1) {
+            bf2 = 1;
+            blockl2 = 1;
+            blockr2 = 0;
+        }
+        else if (active2 == 2) {
+            bf2 = 1;
+            blockr2 = 1;
+            blockl2 = 0;
         }
     }
     if ((myevent.keyCode == 17) && (skystatus2 == 'g')) { //ctrl
@@ -657,15 +743,20 @@ function move4(event2) {
     if (myevent.keyCode == 38 && upf2 == 1) upf2 = 0;
     else if (myevent.keyCode == 38 && dof2 == 1) dof2 = 0;
     if (myevent.keyCode == 219) sactive2 = 0;
+    if (myevent.keyCode == 220 && bf2 == 1) {
+        bf2 = 0;
+        blockl2 = 0;
+        blockr2 = 0;
+    }
 }
 
 function left2() {
-    if ((active2 == 1) && (xpos2 > -373) && (swf2 == 0)) {
+    if ((active2 == 1) && (xpos2 > -373) && (swf2 == 0) && (bf2 != 1)) {
         xpos2 -= 3;
         document.getElementById("player2").style.left = xpos2 + "px";
         setTimeout("left2()", 1);
     }
-    else if ((active2 == 1) && (xpos2 <= -373) && (swf2 == 0)) {
+    else if ((active2 == 1) && (xpos2 <= -373) && (swf2 == 0) && (bf2 != 1)) {
         xpos2 = -373;
         document.getElementById("player2").style.left = xpos2 + "px";
         active2 = 0;
@@ -673,12 +764,12 @@ function left2() {
 }
 
 function right2() {
-    if ((active2 == 2) && (xpos2 < 377) && (swf2 == 0)) {
+    if ((active2 == 2) && (xpos2 < 377) && (swf2 == 0) && (bf2 != 1)) {
         xpos2 += 3;
         document.getElementById("player2").style.left = xpos2 + "px";
         setTimeout("right2()", 1);;
     }
-    else if ((active2 == 2) && (xpos2 >= 377) && (swf2 == 0)) {
+    else if ((active2 == 2) && (xpos2 >= 377) && (swf2 == 0) && (bf2 != 1)) {
         xpos2 = 377;
         document.getElementById("player2").style.left = xpos2 + "px";
         active2 = 0;
@@ -716,7 +807,8 @@ function slash2() {
             j = ypos2 - ypos;
             if (i > 0) document.getElementById("test").src="playerL.png";
             else document.getElementById("test").src="playerR.png";
-            if (Math.abs(i) < 50 && Math.abs(j) < 90) {
+            if (Math.abs(i) < 27 && Math.abs(j) < 47) {
+                ss = 0;
                 skystatus2 = 'c';
                 close2(i , j);
             }
@@ -738,19 +830,32 @@ function close2(a,b) {
         if (skystatus2 == 'c') {
             setTimeout(function(){
                 var abs =  Math.abs(a) > Math.abs(b) ? Math.abs(a) : Math.abs(b);
+                if ((ss == 1) || (a < 0 && blockl != 1) || (a > 0 && blockr != 1) || (skystatus == 'w' && xpos2 == xpos)) {
+                    document.removeEventListener('keydown', move, false);
+                    document.removeEventListener('keydown', move3, false);
+                    document.removeEventListener('keyup', move2, false);
+                    document.removeEventListener('keyup', move4, false);
+                    document.getElementById("result").innerHTML = "PALYER2 WIN!!";
+                }
                 a /=abs; //i ,x-index
                 b /=abs; //j ,y-index
                 if (Math.abs(b) > Math.abs(a) && ypos2 >= 386) {
                     ypos2 = 386;
-                    xpos2 -= (a/Math.abs(a))*4;
+                    if (xpos2 <= -373) xpos2 = -373;
+                    else if (xpos2 >= 377) xpos2 = 377;
+                    else xpos2 -= (a/Math.abs(a))*4;
                 }
                 else if (Math.abs(a) > Math.abs(b) && xpos2 >= 377) {
                     xpos2 = 377;
-                    ypos2 -= (b/Math.abs(b))*4;
+                    if (ypos2 <= 0) ypos2 = 0;
+                    else if (ypos2 >= 386) ypos2 = 386;
+                    else ypos2 -= (b/Math.abs(b))*4;
                 }
                 else if (Math.abs(a) > Math.abs(b) && xpos2 <= -373) {
                     xpos2 = -373;
-                    ypos2 -= (b/Math.abs(b))*4;
+                    if (ypos2 <= 0) ypos2 = 0;
+                    else if (ypos2 >= 386) ypos2 = 386;
+                    else ypos2 -= (b/Math.abs(b))*4;
                 }
                 else {
                     if (xpos2 <= -373) xpos2 = -373;
@@ -790,9 +895,9 @@ function wall2(u,d,v) {
                     if (ypos2 > 0) {
                         cleary = ypos2 + 40;
                         clearx = xpos2 + 380;
-                        ypos2-=3;
+                        ypos2-=4;
                         document.getElementById("player2").style.top = (ypos2 - 100) + "px";
-                        cxt2.clearRect(clearx, cleary, 30, 3);
+                        cxt2.clearRect(clearx, cleary, 30, 4);
                         wall2(1,0,0); 
                     }
                     else {
@@ -805,9 +910,9 @@ function wall2(u,d,v) {
                     if (ypos2 < 386) {
                         cleary = ypos2+30;
                         clearx = xpos2 + 380;
-                        ypos2+=3;
+                        ypos2+=4;
                         document.getElementById("player2").style.top = (ypos2 - 100) + "px";
-                        cxt2.clearRect(clearx, cleary, 30, 3);
+                        cxt2.clearRect(clearx, cleary, 30, 4);
                         wall2(0,1,0);
                     }
                     else {
@@ -821,7 +926,7 @@ function wall2(u,d,v) {
                 else if (hori == 0 && verti == 1 && wd2 == 3) { //左
                     document.getElementById("test").src="playerL.png";
                     if (xpos2 > -373) {
-                        xpos2-=3;
+                        xpos2-=4;
                         cleary = ypos2+30;
                         clearx = xpos2 + 400;
                         document.getElementById("player2").style.left = xpos2 + "px";
@@ -836,7 +941,7 @@ function wall2(u,d,v) {
                 else if (hori == 0 && verti == 2 && wd2 == 7) { //右
                     document.getElementById("test").src="playerR.png";
                     if (xpos2 < 377) {
-                        xpos2+=3;
+                        xpos2+=4;
                         cleary = ypos2+30;
                         clearx = xpos2 + 380;
                         document.getElementById("player2").style.left = xpos2 + "px";
@@ -852,8 +957,8 @@ function wall2(u,d,v) {
                 else if (hori == 2 && verti == 2 && wd2 == 8) { //右上
                     document.getElementById("test").src="playerR.png";
                     if (xpos2 < 377 && ypos2 > 0) {
-                        ypos2-=3;
-                        xpos2+=3;
+                        ypos2-=4;
+                        xpos2+=4;
                         cleary = ypos2+30;
                         clearx = xpos2 + 380;
                         document.getElementById("player2").style.left = xpos2 + "px";
@@ -879,8 +984,8 @@ function wall2(u,d,v) {
                 else if (hori == 2 && verti == 1 && wd2 == 2) { //左上
                     document.getElementById("test").src="playerL.png";
                     if (xpos2 > -373 && ypos2 > 0) {
-                        ypos2-=3;
-                        xpos2-=3;
+                        ypos2-=4;
+                        xpos2-=4;
                         cleary = ypos2+30;
                         clearx = xpos2 + 380;
                         document.getElementById("player2").style.left = xpos2 + "px";
@@ -906,8 +1011,8 @@ function wall2(u,d,v) {
                 else if (hori == 1 && verti == 2 && wd2 == 4) { //右下
                     document.getElementById("test").src="playerR.png";
                     if (xpos2 < 377 && ypos2 < 386) {
-                        ypos2+=3;
-                        xpos2+=3;
+                        ypos2+=4;
+                        xpos2+=4;
                         cleary = ypos2+30;
                         clearx = xpos2+380;
                         document.getElementById("player2").style.left = xpos2 + "px";
@@ -936,8 +1041,8 @@ function wall2(u,d,v) {
                 else if (hori == 1 && verti == 1 && wd2 == 6) { //左下
                     document.getElementById("test").src="playerL.png";
                     if (xpos2 > -373 && ypos2 < 386) {
-                        ypos2+=3;
-                        xpos2-=3;
+                        ypos2+=4;
+                        xpos2-=4;
                         cleary = ypos2+30;
                         clearx = xpos2+380;
                         document.getElementById("player2").style.left = xpos2 + "px";
