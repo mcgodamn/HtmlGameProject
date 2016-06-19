@@ -7,10 +7,12 @@
 	<style type = "text/css">
 					body {
 						background: gray;
+						overflow:scroll;
+						overflow-x:hidden;
 					}
 					div.bg {
 						width: 1200px;
-						height: 750px;
+						height: 720px;
 						background: url("background.png");
 					}
 					td {
@@ -40,14 +42,14 @@
 <table width="100%" border="0">
     <tr>
         <td align="center">
-        	<canvas id="canv" width="1200" height="750" class="ab2"></canvas>
-        	<canvas id="canv2" width="1200" height="750" class="ab1"></canvas>
+        	<canvas id="canv" width="1200" height="720" class="ab2"></canvas>
+        	<canvas id="canv2" width="1200" height="720" class="ab1"></canvas>
             <div class="bg ab0">
-                <div id="player1" style="z-index: 2;">
-                    <img id="test" src="playerR.png" alt="fuck">
+                <div id="player1">
+                    <img id="test" style="z-index: 2;" src="playerRM.png" alt="fuck">
                 </div>
                 <div id="player2"  style="z-index: 2;">
-                	<img src="c.png" alt="fucku">
+                	<img id="test2" src="playerLM.png" alt="fucku">
                 </div>
             </div>
         </td>
