@@ -1,4 +1,4 @@
-//目前問題 slash有時會卡住
+//目前問題 
 //跑步速度 3 刺殺 4 勾索 5
 
 function ini() {
@@ -179,11 +179,13 @@ function move(event) {
     }
     else if (myevent.keyCode == 85 && skystatus != 's') { //u
         if (active == 1) {
+            document.getElementById("test").src="playerLB.png";
             bf = 1;
             blockl = 1;
             blockr = 0;
         }
         else if (active == 2) {
+            document.getElementById("test").src="playerRB.png";
             bf = 1;
             blockr = 1;
             blockl = 0;
@@ -233,6 +235,8 @@ function move2(event2) {
     if (myevent.keyCode == 89) sactive = 0;
     if (myevent.keyCode == 85 && bf == 1) {
         bf = 0;
+        if(blockl == 1) document.getElementById("test").src="playerLM.png";
+        else document.getElementById("test").src="playerRM.png";
         blockl = 0;
         blockr = 0;
     }
@@ -296,6 +300,14 @@ function slash() {
             if (i > 0) document.getElementById("test").src="playerLS.png";
             else document.getElementById("test").src="playerRS.png";
             if (Math.abs(i) < 50 && Math.abs(j) < 75) {
+                document.getElementById("result").innerHTML = xpos + " " + xpos2;
+                if ((ss == 2) || (i < 0 && blockl2 != 1) || (i > 0 && blockr2 != 1) || (skystatus2 == 'w' && xpos == xpos2)) {
+                    document.removeEventListener('keydown', move, false);
+                    document.removeEventListener('keydown', move3, false);
+                    document.removeEventListener('keyup', move2, false);
+                    document.removeEventListener('keyup', move4, false);
+                    document.getElementById("result").innerHTML = "PALYER1 WIN!!";
+                }
                 skystatus = 'c';
                 close(i , j);
             }
@@ -317,13 +329,6 @@ function close(a,b) {
         if (skystatus == 'c') {
             setTimeout(function(){
                 var abs =  Math.abs(a) > Math.abs(b) ? Math.abs(a) : Math.abs(b);
-                if ((ss == 2) || (a < 0 && blockl2 != 1) || (a > 0 && blockr2 != 1) || (skystatus == 'w' && xpos2 == xpos)) {
-                    document.removeEventListener('keydown', move, false);
-                    document.removeEventListener('keydown', move3, false);
-                    document.removeEventListener('keyup', move2, false);
-                    document.removeEventListener('keyup', move4, false);
-                    document.getElementById("result").innerHTML = "PALYER1 WIN!!";
-                }
                 a /=abs; //i ,x-index
                 b /=abs; //j ,y-index
                 if (Math.abs(b) > Math.abs(a) && ypos >= 620) {
@@ -700,11 +705,13 @@ function move3(event) {
     }
     else if (myevent.keyCode == 220 && skystatus2 != 's') { //\
         if (active2 == 1) {
+            document.getElementById("test2").src="playerLB.png";
             bf2 = 1;
             blockl2 = 1;
             blockr2 = 0;
         }
         else if (active2 == 2) {
+            document.getElementById("test2").src="playerRB.png";
             bf2 = 1;
             blockr2 = 1;
             blockl2 = 0;
@@ -753,6 +760,8 @@ function move4(event2) {
     if (myevent.keyCode == 219) sactive2 = 0;
     if (myevent.keyCode == 220 && bf2 == 1) {
         bf2 = 0;
+        if(blockl2 == 1) document.getElementById("test2").src="playerLM.png";
+        else document.getElementById("test2").src="playerRM.png";
         blockl2 = 0;
         blockr2 = 0;
     }
@@ -816,7 +825,13 @@ function slash2() {
             if (i > 0) document.getElementById("test2").src="playerLS.png";
             else document.getElementById("test2").src="playerRS.png";
             if (Math.abs(i) < 50 && Math.abs(j) < 75) {
-                ss = 0;
+                if ((ss == 1) || (i < 0 && blockl != 1) || (i > 0 && blockr != 1) || (skystatus == 'w' && xpos2 == xpos)) {
+                    document.removeEventListener('keydown', move, false);
+                    document.removeEventListener('keydown', move3, false);
+                    document.removeEventListener('keyup', move2, false);
+                    document.removeEventListener('keyup', move4, false);
+                    document.getElementById("result").innerHTML = "PALYER2 WIN!!";
+                }
                 skystatus2 = 'c';
                 close2(i , j);
             }
@@ -838,13 +853,6 @@ function close2(a,b) {
         if (skystatus2 == 'c') {
             setTimeout(function(){
                 var abs =  Math.abs(a) > Math.abs(b) ? Math.abs(a) : Math.abs(b);
-                if ((ss == 1) || (a < 0 && blockl != 1) || (a > 0 && blockr != 1) || (skystatus == 'w' && xpos2 == xpos)) {
-                    document.removeEventListener('keydown', move, false);
-                    document.removeEventListener('keydown', move3, false);
-                    document.removeEventListener('keyup', move2, false);
-                    document.removeEventListener('keyup', move4, false);
-                    document.getElementById("result").innerHTML = "PALYER2 WIN!!";
-                }
                 a /=abs; //i ,x-index
                 b /=abs; //j ,y-index
                 if (Math.abs(b) > Math.abs(a) && ypos2 >= 620) {
