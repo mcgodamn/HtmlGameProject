@@ -5,6 +5,7 @@
 	<title>index</title>
 	<script src="game.js"></script>
 	<script type="text/javascript">
+		
 		function format	(){
 			getContent( "account.php" );
 		}
@@ -74,6 +75,32 @@
 <body onload="ini()">
 <!-- <button onclick="test()">test</button> -->
 <p id="result">welcome</p>
+
+<script type="text/javascript">
+/*---------這裡--------------------------------------------------------------------*/
+	var image='http://i.imgur.com/izLBvPG.png';
+	var usingSkill=1;
+	if(usingSkill==1){
+		console.log("hello");
+		document.addEventListener('keyup', skill, false);
+		document.addEventListener('keydown', skill1, false);
+	} 
+	
+	function skill(){ 
+		var myevent = event ? event : window.event;
+		if(myevent.keyCode == 66){
+			document.getElementById('test').src=image;
+		}
+	}
+	function skill1(){
+		var myevent = event ? event : window.event;
+		if(myevent.keyCode == 66){
+			document.getElementById('test').src='explosion.jpg';
+		}
+	}
+/*---------這裡--------------------------------------------------------------------*/
+</script>
+
 <table width="100%" border="0">
     <tr>
     	<td width="200px" id="user"></td>
