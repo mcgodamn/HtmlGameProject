@@ -78,18 +78,34 @@
 
 <script type="text/javascript">
 /*---------這裡--------------------------------------------------------------------*/
-	var image='http://i.imgur.com/izLBvPG.png';
-	var usingSkill=1;
+	var image="";
+	var usingSkill=0;
+	<?php
+		session_start();
+		$database=mysqli_connect( 'localhost','root', '' ,'dwp');
+		if(isset($_SESSION['account'])){
+			$id=$_SESSION['account'];
+			$query=mysqli_query($database,"SELECT usingSkill FROM member WHERE ID='".$id."'");
+			$pass = mysqli_fetch_array($query,MYSQLI_ASSOC);			
+			print("usingSkill=".$pass["usingSkill"].";");
+			$query=mysqli_query($database,"SELECT image FROM member WHERE ID='".$id."'");
+			$pass = mysqli_fetch_array($query,MYSQLI_ASSOC);			
+			print("image='".$pass["image"]."';");			
+		}
+	?>
+
+	
 	if(usingSkill==1){
-		console.log("hello");
-		document.addEventListener('keyup', skill, false);
-		document.addEventListener('keydown', skill1, false);
+		document.addEventListener('keydown', skill, false);
+		document.addEventListener('keyup', skill1, false);
 	} 
 	
 	function skill(){ 
 		var myevent = event ? event : window.event;
 		if(myevent.keyCode == 66){
 			document.getElementById('test').src=image;
+			document.getElementById('test').width=150;
+			document.getElementById('test').height=100;
 		}
 	}
 	function skill1(){
@@ -102,8 +118,10 @@
 </script>
 
 <table width="100%" border="0">
-    <tr>
-    	<td width="200px" id="user"></td>
+	<tr>
+		<td height="300" id="user"></td>
+	</tr>
+    <tr>    	
         <td align="center">
         	<canvas id="canv" width="1200" height="720" class="ab2"></canvas>
         	<canvas id="canv2" width="1200" height="720" class="ab1"></canvas>
