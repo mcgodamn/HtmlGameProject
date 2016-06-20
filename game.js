@@ -23,11 +23,14 @@ function ini() {
     dof2 = 0;
     wd2 = 0;
     sactive2 = 0;
+    start = 0;
+    document.getElementById("test").src="playerR.png";
+    document.getElementById("test2").src="playerL.png";
     document.getElementById("player1").style.position = "relative";
-    document.getElementById("player1").style.top = ypos + "px";
+    document.getElementById("player1").style.top = ypos - 75 + "px";
     document.getElementById("player1").style.left = xpos + "px";
     document.getElementById("player2").style.position = "relative";
-    document.getElementById("player2").style.top = (ypos2-105) + "px";
+    document.getElementById("player2").style.top = (ypos2-105) - 148 + "px";
     document.getElementById("player2").style.left = xpos2 + "px";
     document.addEventListener('keydown', move, false);
     document.addEventListener('keydown', move3, false);
@@ -46,10 +49,18 @@ function ini() {
     blockl2 = 0;
     blockr2 = 0;
     ss = 0; //斬殺衝突(紀錄誰先砍誰)
+    vic = 0;
 }
 
 function move(event) {
     var myevent = event ? event : window.event;
+    if (start == 0) {
+        start = 1;
+        document.getElementById("test").src="playerRM.png";
+        document.getElementById("test2").src="player2LM.png";
+        document.getElementById("player1").style.top = ypos + "px";
+        document.getElementById("player2").style.top = (ypos2-105) + "px";
+    }
     var wallv;
     if ((myevent.keyCode == 89) && (skystatus != 's') && (skystatus != 'c') && sactive == 0) { //t
         if (skystatus2 == 's') ss = 1;
@@ -300,13 +311,36 @@ function slash() {
             if (i > 0) document.getElementById("test").src="playerLS.png";
             else document.getElementById("test").src="playerRS.png";
             if (Math.abs(i) < 50 && Math.abs(j) < 75) {
-                document.getElementById("result").innerHTML = xpos + " " + xpos2;
-                if ((ss == 2) || (i < 0 && blockl2 != 1) || (i > 0 && blockr2 != 1) || (skystatus2 == 'w' && xpos == xpos2)) {
+                if (ss == 1) {
                     document.removeEventListener('keydown', move, false);
                     document.removeEventListener('keydown', move3, false);
                     document.removeEventListener('keyup', move2, false);
                     document.removeEventListener('keyup', move4, false);
-                    document.getElementById("result").innerHTML = "PALYER1 WIN!!";
+                    if (vic == 0) {
+                        alert("PALYER2 WIN!!");
+                        vic = 1;
+                    }
+                }
+                else if (ss == 2) {
+                    document.removeEventListener('keydown', move, false);
+                    document.removeEventListener('keydown', move3, false);
+                    document.removeEventListener('keyup', move2, false);
+                    document.removeEventListener('keyup', move4, false);
+                    if (vic == 0) {
+                        alert("PALYER1 WIN!!");
+                        vic = 1;
+                    }
+                }
+                else if ((i < 0 && blockl2 != 1) || (i > 0 && blockr2 != 1) || xpos == xpos2) {
+                    document.removeEventListener('keydown', move, false);
+                    document.removeEventListener('keydown', move3, false);
+                    document.removeEventListener('keyup', move2, false);
+                    document.removeEventListener('keyup', move4, false);
+                    if (vic == 0) {
+                        alert("PALYER1 WIN!!");
+                        vic = 1;
+                    }
+                    
                 }
                 skystatus = 'c';
                 close(i , j);
@@ -357,8 +391,8 @@ function close(a,b) {
                     else if (ypos >= 620) ypos = 620;
                     else ypos -= b*4;
                 }
-                document.getElementById("player1").style.top = ypos + "px";
                 document.getElementById("player1").style.left = xpos + "px";
+                document.getElementById("player1").style.top = ypos + "px";
                 c++;
                 close(a,b);
             },1)
@@ -705,13 +739,13 @@ function move3(event) {
     }
     else if (myevent.keyCode == 220 && skystatus2 != 's') { //\
         if (active2 == 1) {
-            document.getElementById("test2").src="playerLB.png";
+            document.getElementById("test2").src="player2LB.png";
             bf2 = 1;
             blockl2 = 1;
             blockr2 = 0;
         }
         else if (active2 == 2) {
-            document.getElementById("test2").src="playerRB.png";
+            document.getElementById("test2").src="player2RB.png";
             bf2 = 1;
             blockr2 = 1;
             blockl2 = 0;
@@ -725,14 +759,14 @@ function move3(event) {
     if ((myevent.keyCode == 37) && (active2 != 1)) {
         active2 = 1;
         if (swf2 == 0) {
-            document.getElementById("test2").src="playerLM.png";
+            document.getElementById("test2").src="player2LM.png";
             left2();
         }
     }
     else if ((myevent.keyCode == 39) && (active2 != 2)) {
         active2 = 2;
         if (swf2 == 0) {
-            document.getElementById("test2").src="playerRM.png";
+            document.getElementById("test2").src="player2RM.png";
             right2();
         }
     }
@@ -760,8 +794,8 @@ function move4(event2) {
     if (myevent.keyCode == 219) sactive2 = 0;
     if (myevent.keyCode == 220 && bf2 == 1) {
         bf2 = 0;
-        if(blockl2 == 1) document.getElementById("test2").src="playerLM.png";
-        else document.getElementById("test2").src="playerRM.png";
+        if(blockl2 == 1) document.getElementById("test2").src="player2LM.png";
+        else document.getElementById("test2").src="player2RM.png";
         blockl2 = 0;
         blockr2 = 0;
     }
@@ -822,15 +856,38 @@ function slash2() {
             var i,j;
             i = xpos2 - xpos;
             j = ypos2 - ypos;
-            if (i > 0) document.getElementById("test2").src="playerLS.png";
-            else document.getElementById("test2").src="playerRS.png";
+            if (i > 0) document.getElementById("test2").src="player2LS.png";
+            else document.getElementById("test2").src="player2RS.png";
             if (Math.abs(i) < 50 && Math.abs(j) < 75) {
-                if ((ss == 1) || (i < 0 && blockl != 1) || (i > 0 && blockr != 1) || (skystatus == 'w' && xpos2 == xpos)) {
+                if (ss == 1) {
                     document.removeEventListener('keydown', move, false);
                     document.removeEventListener('keydown', move3, false);
                     document.removeEventListener('keyup', move2, false);
                     document.removeEventListener('keyup', move4, false);
-                    document.getElementById("result").innerHTML = "PALYER2 WIN!!";
+                    if (vic == 0) {
+                        alert("PALYER2 WIN!!");
+                        vic = 1;
+                    }
+                }
+                else if (ss == 2) {
+                    document.removeEventListener('keydown', move, false);
+                    document.removeEventListener('keydown', move3, false);
+                    document.removeEventListener('keyup', move2, false);
+                    document.removeEventListener('keyup', move4, false);
+                    if (vic == 0) {
+                        alert("PALYER1 WIN!!");
+                        vic = 1;
+                    }
+                }
+                else if ((i < 0 && blockl != 1) || (i > 0 && blockr != 1) || xpos2 == xpos) {
+                    document.removeEventListener('keydown', move, false);
+                    document.removeEventListener('keydown', move3, false);
+                    document.removeEventListener('keyup', move2, false);
+                    document.removeEventListener('keyup', move4, false);
+                    if (vic == 0) {
+                        alert("PALYER2 WIN!!");
+                        vic = 1;
+                    }
                 }
                 skystatus2 = 'c';
                 close2(i , j);
@@ -890,10 +947,10 @@ function close2(a,b) {
     }
     else {
         if(a < 0 ){
-            document.getElementById("test2").src="playerRM.png";
+            document.getElementById("test2").src="player2RM.png";
         }
         else if(a > 0 ){
-            document.getElementById("test2").src="playerLM.png";
+            document.getElementById("test2").src="player2LM.png";
         }
         c2 = 0;
         skystatus2 = 'j';
@@ -946,7 +1003,7 @@ function wall2(u,d,v) {
                     }
                 }
                 else if (hori == 0 && verti == 1 && wd2 == 3) { //左
-                    document.getElementById("test2").src="playerLM.png";
+                    document.getElementById("test2").src="player2LM.png";
                     if (xpos2 > -550) {
                         xpos2-=5;
                         cleary = ypos2+30;
@@ -961,7 +1018,7 @@ function wall2(u,d,v) {
                     }
                 }
                 else if (hori == 0 && verti == 2 && wd2 == 7) { //右
-                    document.getElementById("test2").src="playerRM.png";
+                    document.getElementById("test2").src="player2RM.png";
                     if (xpos2 < 533) {
                         xpos2+=5;
                         cleary = ypos2+30;
@@ -977,7 +1034,7 @@ function wall2(u,d,v) {
                     
                 }
                 else if (hori == 2 && verti == 2 && wd2 == 8) { //右上
-                    document.getElementById("test2").src="playerRM.png";
+                    document.getElementById("test2").src="player2RM.png";
                     if (xpos2 < 533 && ypos2 > 0) {
                         ypos2-=5;
                         xpos2+=5;
@@ -1004,7 +1061,7 @@ function wall2(u,d,v) {
                     }
                 }
                 else if (hori == 2 && verti == 1 && wd2 == 2) { //左上
-                    document.getElementById("test2").src="playerLM.png";
+                    document.getElementById("test2").src="player2LM.png";
                     if (xpos2 > -550 && ypos2 > 0) {
                         ypos2-=5;
                         xpos2-=5;
@@ -1031,7 +1088,7 @@ function wall2(u,d,v) {
                     }
                 }
                 else if (hori == 1 && verti == 2 && wd2 == 4) { //右下
-                    document.getElementById("test2").src="playerRM.png";
+                    document.getElementById("test2").src="player2RM.png";
                     if (xpos2 < 533 && ypos2 < 620) {
                         ypos2+=5;
                         xpos2+=5;
@@ -1061,7 +1118,7 @@ function wall2(u,d,v) {
                     }
                 }
                 else if (hori == 1 && verti == 1 && wd2 == 6) { //左下
-                    document.getElementById("test2").src="playerLM.png";
+                    document.getElementById("test2").src="player2LM.png";
                     if (xpos2 > -550 && ypos2 < 620) {
                         ypos2+=5;
                         xpos2-=5;
