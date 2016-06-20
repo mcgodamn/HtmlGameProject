@@ -74,8 +74,6 @@
 </head>
 <body onload="ini()">
 <!-- <button onclick="test()">test</button> -->
-<p id="result">welcome</p>
-
 <script type="text/javascript">
 /*---------這裡--------------------------------------------------------------------*/
 	var image="";
