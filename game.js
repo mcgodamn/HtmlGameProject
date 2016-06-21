@@ -611,7 +611,7 @@ function test() {
 function move3(event) {
     var myevent = event ? event : window.event;
     var wallv;
-    if ((myevent.keyCode == 219) && (skystatus2 != 's') && (skystatus2 != 'c') && sactive2 == 0) { //{
+    if ((myevent.keyCode == 221) && (skystatus2 != 's') && (skystatus2 != 'c') && sactive2 == 0) { //}
         if (skystatus == 's') ss = 2;
         bf2 = 0;
         blockl2 = 0;
@@ -623,7 +623,7 @@ function move3(event) {
         swf2 = 1;
         slash2();
     }
-    else if (myevent.keyCode == 221) { //}
+    else if (myevent.keyCode == 219) { //{
         if (upf2 == 1 && active2 == 0 && wd2 != 1) { //上
             if (ss == 2) ss = 0;
             cxt2.clearRect(0, 0, canvas2.width, canvas2.height);
@@ -791,7 +791,7 @@ function move4(event2) {
     }
     if (myevent.keyCode == 38 && upf2 == 1) upf2 = 0;
     else if (myevent.keyCode == 38 && dof2 == 1) dof2 = 0;
-    if (myevent.keyCode == 219) sactive2 = 0;
+    if (myevent.keyCode == 221) sactive2 = 0;
     if (myevent.keyCode == 220 && bf2 == 1) {
         bf2 = 0;
         if(blockl2 == 1) document.getElementById("test2").src="player2LM.png";
