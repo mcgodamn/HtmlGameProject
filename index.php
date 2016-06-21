@@ -10,7 +10,6 @@
 			getContent( "account.php" );
 		}
 
-
 		function getContent( url )
       {
          // attempt to create XMLHttpRequest object and make the request
@@ -56,17 +55,20 @@
 						top: 30px;
 					}
 					.ab2 {
-						position: absolute;
+						position: fixed;
+						top: 200px;
 						left: 360px;
 						z-index: 2;
 					}
 					.ab1 {
-						position: absolute;
+						position: fixed;
+						top: 200px;
 						left: 360px;
 						z-index: 1;
 					}
 					.ab0 {
-						position: absolute;
+						position: fixed;
+						top: 200px;
 						left: 360px;
 						z-index: 0;
 					}

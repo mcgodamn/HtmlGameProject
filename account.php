@@ -27,7 +27,7 @@
 					print("' height='200'/>");
 				}
 
-				print("   Hi! ");			
+				print("<br>&nbsp;&nbsp;Hi! ");			
 				print($_SESSION['account']);
 				print("<form method = 'post' action='account.php'><input type = 'submit' name = 'logout' value = 'Logout'></form>");
 				print("<a href='upload.php'><button>上傳頭像</button></a>");
